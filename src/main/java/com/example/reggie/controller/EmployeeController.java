@@ -1,10 +1,12 @@
 package com.example.reggie.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.reggie.entity.Employee;
 import com.example.reggie.service.EmployeeService;
 import com.example.reggie.util.R;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
@@ -71,5 +73,28 @@ public class EmployeeController {
         employee.setUpdateUser(user);
         employeeService.save(employee);
         return R.success("新增员工成功。");
+    }
+
+    /**
+     * 员工信息分页查询
+     * @param page 当前页面
+     * @param pageSize 煤业大小
+     * @param name
+     * @return 返回page的R对象而不是Employee对象
+     */
+    @GetMapping("/page")
+    public R<Page> page(int page, int pageSize, String name){
+        log.info("curPage = {}, pageSize = {}, name = {}", page, pageSize, name);
+        // 构造分页构造器
+        Page pInfo = new Page(page, pageSize);
+        // 构造条件构造器
+        LambdaQueryWrapper<Employee> qw = new LambdaQueryWrapper<>();
+        // 添加条件
+        qw.like(StringUtils.isNotEmpty(name), Employee::getName, name);
+        // 排序
+        qw.orderByDesc(Employee::getUpdateTime);
+        // 执行查询, 内部封装，不需要返回
+        employeeService.page(pInfo, qw);
+        return R.success(pInfo);
     }
 }

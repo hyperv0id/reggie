@@ -79,7 +79,7 @@ public class EmployeeController {
      * 员工信息分页查询
      * @param page 当前页面
      * @param pageSize 煤业大小
-     * @param name
+     * @param name 员工姓名，正则匹配
      * @return 返回page的R对象而不是Employee对象
      */
     @GetMapping("/page")
@@ -96,5 +96,15 @@ public class EmployeeController {
         // 执行查询, 内部封装，不需要返回
         employeeService.page(pInfo, qw);
         return R.success(pInfo);
+    }
+
+    @PutMapping
+    public R<String> update(HttpServletRequest request, @RequestBody Employee employee){
+        // JavaScript会放不下，需要在jackson中配置
+        Long empId = (Long)request.getSession().getAttribute("employee");
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(empId);
+        employeeService.updateById(employee);
+        return R.success("员工信息修改");
     }
 }

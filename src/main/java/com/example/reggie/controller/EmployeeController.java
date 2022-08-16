@@ -7,12 +7,10 @@ import com.example.reggie.util.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 
 /**
  * @program: reggie
@@ -54,5 +52,24 @@ public class EmployeeController {
         // 5. 登录成功, 将员工id存入Session并返回登陆成功
         request.getSession().setAttribute("employee", emp.getId());
         return R.success(emp);
+    }
+
+    /**
+     * 新增员工方法, 使用post方法
+     * @param employee 员工
+     * @return 返回是否添加成功
+     */
+    @PostMapping
+    public R<String> addEmployee(HttpServletRequest request, @RequestBody Employee employee){
+        log.info("新增员工：{}", employee);
+        // 加密处理 TODO: 加盐
+        employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
+        employee.setCreateTime(LocalDateTime.now());
+        employee.setUpdateTime(LocalDateTime.now());
+        Long user = (Long) request.getSession().getAttribute("employee");
+        employee.setCreateUser(user);
+        employee.setUpdateUser(user);
+        employeeService.save(employee);
+        return R.success("新增员工成功。");
     }
 }

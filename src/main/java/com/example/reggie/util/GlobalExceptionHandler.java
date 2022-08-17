@@ -36,4 +36,12 @@ public class GlobalExceptionHandler {
         }
         return R.error("未知错误，操作失败");
     }
+
+    /**
+     * 处理删除菜品时存在已关联的菜品或套餐的异常
+     */
+    @ExceptionHandler(CustomException.class)
+    public R<String> exceptionHandler(CustomException ex){
+        return R.error(ex.getMessage());
+    }
 }

@@ -53,4 +53,17 @@ public class CategoryController {
         service.page(pInfo, qw);
         return R.success(pInfo);
     }
+
+
+    /**
+     * 根据id删除菜品，由于前端请求的是ids，在这里我们改成ids而不是id，否则id会为null不能成功删除
+     */
+    @DeleteMapping
+    public R<String> deleteCategory(Long ids){
+        log.info("删除菜品，id为：{}", ids);
+
+        service.myRemoveById(ids);
+        return R.success("分类信息删除成功");
+    }
+
 }

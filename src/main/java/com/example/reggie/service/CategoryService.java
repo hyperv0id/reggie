@@ -11,4 +11,5 @@ import com.example.reggie.entity.Category;
  **/
 
 public interface CategoryService extends IService<Category> {
+    public void myRemoveById(Long id);
 }

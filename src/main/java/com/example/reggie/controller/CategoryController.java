@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @program: reggie
  * @description:
@@ -75,6 +77,22 @@ public class CategoryController {
         log.info("修改分类信息 {}",category);
         service.updateById(category);
         return R.success("修改信息成功");
+    }
+
+    /**
+     * 根据条件查询分类数据
+     * @param category 实体
+     * @return category列表
+     */
+    @GetMapping("/list")
+    public R<List<Category>> list(Category category){
+        LambdaQueryWrapper<Category> qw = new LambdaQueryWrapper<>();
+        qw.eq(category.getType()!=null, Category::getType, category.getType());
+        // 添加排序条件
+        qw.orderByAsc(Category::getSort).orderByDesc(Category::getUpdateTime);
+        List<Category> categoryList= service.list(qw);
+        // todo: delete null;
+        return R.success(categoryList);
     }
 
 }

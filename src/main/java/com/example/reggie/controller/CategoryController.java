@@ -43,7 +43,7 @@ public class CategoryController {
      * @param pageSize 每页大小
      */
     @GetMapping("/page")
-    public R<Page> page(int page, int pageSize){
+    public R<Page<Category>> page(int page, int pageSize){
         log.info("查询菜品-->curPage = {}, pageSize = {}", page, pageSize);
         // 构造分页构造器
         Page<Category> pInfo = new Page<>(page, pageSize);
@@ -91,7 +91,6 @@ public class CategoryController {
         // 添加排序条件
         qw.orderByAsc(Category::getSort).orderByDesc(Category::getUpdateTime);
         List<Category> categoryList= service.list(qw);
-        // todo: delete null;
         return R.success(categoryList);
     }
 

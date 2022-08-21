@@ -15,5 +15,9 @@ public interface DishService extends IService<Dish> {
     /**
      * 新增菜品，同时插入对应口味
      */
-    public void saveWithFlavor(DishDto dto);
+    void saveWithFlavor(DishDto dto);
+
+    DishDto getByIdWithFlavor(Long id);
+
+    void updateWithFlavor(DishDto dto);
 }

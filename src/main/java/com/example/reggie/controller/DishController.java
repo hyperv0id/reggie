@@ -47,9 +47,6 @@ public class DishController {
         return R.success("菜品添加成功");
     }
 
-
-
-
     /**
      * 菜品信息分页查询
      * @param page 当前页码
@@ -87,5 +84,27 @@ public class DishController {
         dtoPage.setRecords(dtoList);
 
         return R.success(dtoPage);
+    }
+
+    /**
+     * 根据id获取对应菜品，包括口味和菜品信息
+     * @param id 菜品id
+     * @return dishDto而非dish实体
+     */
+    @GetMapping("/{id}")
+    public R<DishDto> getOne(@PathVariable Long id){
+        DishDto dto = dService.getByIdWithFlavor(id);
+        return R.success(dto);
+    }
+
+    /**
+     * 修改菜品功能实现
+     * @param dto 口味及菜品信息
+     * @return 修改成功
+     */
+    @PutMapping
+    public R<String> update(@RequestBody DishDto dto){
+        dService.updateWithFlavor(dto);
+        return R.success("菜品及口味信息更新成功");
     }
 }

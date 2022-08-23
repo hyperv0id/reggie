@@ -1,9 +1,13 @@
 package com.example.reggie.controller;
 
+import com.example.reggie.dto.SetmealDto;
 import com.example.reggie.service.SetMealService;
 import com.example.reggie.service.SetmealDishService;
+import com.example.reggie.util.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,6 +26,11 @@ public class SetmealController {
     private SetMealService setmealService;
     @Autowired
     private SetmealDishService dishService;
-
+    @PostMapping
+    public R<String> save(@RequestBody SetmealDto dto){
+        log.info("新建套餐：{}", dto);
+        setmealService.saveWithDish(dto);
+        return R.success("新增套餐成功");
+    }
 
 }

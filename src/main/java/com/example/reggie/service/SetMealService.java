@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.reggie.dto.SetmealDto;
 import com.example.reggie.entity.Setmeal;
 
+import java.util.List;
+
 /**
  * @program: reggie
  * @description: 套餐service
@@ -18,4 +20,10 @@ public interface SetMealService extends IService<Setmeal> {
      * @param dto 套餐数据
      */
     void saveWithDish(SetmealDto dto);
+
+    /**
+     * 删除套餐
+     * @param ids 套餐ids
+     */
+    void removeWithDish(List<Long> ids);
 }
